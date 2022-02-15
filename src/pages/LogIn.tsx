@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Box, Divider, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "@mui/icons-material/Google";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "../lib/firebase";
+import { SnackbarContext } from "../lib/snackbarContext";
 
 export default function LogIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { handleActivate } = useContext(SnackbarContext);
 
   const navigate = useNavigate();
 
@@ -21,17 +28,24 @@ export default function LogIn() {
     setPassword(target.value);
   };
 
-  const handleClick = () => {
-    console.log("login");
+  const handleLoginWithEmailAndPassword = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      handleActivate("success", "Logged in");
+      navigate("/");
+    } catch (e: any) {
+      handleActivate("error", e.message);
+    }
   };
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
+      handleActivate("success", "You're logged in!");
       navigate("/");
-    } catch (error: any) {
-      alert(error.message);
+    } catch (e: any) {
+      handleActivate("error", e.message);
     }
   };
 
@@ -59,7 +73,6 @@ export default function LogIn() {
                   textAlign: "center",
                   padding: "1rem",
                   bgcolor: "background.paper",
-                  //border: "1px solid #0712ff",
                 }}
               >
                 <img width={200} src="/images/JUST_DO_IT.png" alt="Todo Logo" />
@@ -67,6 +80,7 @@ export default function LogIn() {
                 <TextField
                   id="standard-basic"
                   label="Email"
+                  type="email"
                   value={email}
                   onChange={handleEmailChange}
                   sx={{
@@ -85,7 +99,7 @@ export default function LogIn() {
                 <Button
                   sx={{ margin: "1rem" }}
                   variant="contained"
-                  onClick={handleClick}
+                  onClick={handleLoginWithEmailAndPassword}
                 >
                   Log In
                 </Button>

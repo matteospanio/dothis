@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Box, Divider, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+import { SnackbarContext } from "../lib/snackbarContext";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../lib/firebase";
 
 export default function SignIn() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { handleActivate } = useContext(SnackbarContext);
 
   const navigate = useNavigate();
 
@@ -26,8 +31,11 @@ export default function SignIn() {
   const handleClick = async () => {
     console.log("login");
     try {
-      navigate("/");
-    } catch (error) {}
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigate("/login");
+    } catch (e: any) {
+      handleActivate("error", e.message);
+    }
   };
 
   return (
@@ -70,6 +78,7 @@ export default function SignIn() {
                 <TextField
                   id="standard-basic"
                   label="Email"
+                  type="email"
                   value={email}
                   onChange={handleEmailChange}
                   sx={{
