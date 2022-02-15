@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { tasks } from "../../costants/faker";
+import { tasks } from "../../constants/faker";
 
 export default function Todo() {
   const { id } = useParams();

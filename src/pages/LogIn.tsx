@@ -11,6 +11,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { SnackbarContext } from "../lib/snackbarContext";
+import * as ROUTES from "../constants/routes";
 
 export default function LogIn() {
   const [email, setEmail] = useState("");
@@ -101,7 +102,7 @@ export default function LogIn() {
                   variant="contained"
                   onClick={handleLoginWithEmailAndPassword}
                 >
-                  Log In
+                  Login
                 </Button>
                 <div>or</div>
                 <Button
@@ -111,7 +112,7 @@ export default function LogIn() {
                   color="secondary"
                   onClick={handleGoogleLogin}
                 >
-                  Log In with Google
+                  Login with Google
                 </Button>
                 <Divider />
                 <Typography
@@ -120,7 +121,7 @@ export default function LogIn() {
                     marginBottom: "1rem",
                   }}
                 >
-                  Missing account? <Link to="/signin">Sign In</Link>
+                  Missing account? <Link to={ROUTES.SIGNUP}>Sign Up</Link>
                 </Typography>
               </Box>
             </form>

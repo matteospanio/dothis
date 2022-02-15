@@ -1,9 +1,9 @@
 import React from "react";
 import { Divider, List } from "@mui/material";
-import LogoutIcon from "@mui/icons-material/Logout";
 import AllIcon from "@mui/icons-material/FormatListBulleted";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DrawerListItem from "./DrawerListItem";
+import DrawerListLogout from "./DrawerListLogout";
 
 export default function DrawerList() {
   return (
@@ -15,7 +15,7 @@ export default function DrawerList() {
         text="Settings"
         icon={<SettingsIcon />}
       />
-      <DrawerListItem link="/login" text="Logout" icon={<LogoutIcon />} />
+      <DrawerListLogout />
     </List>
   );
 }

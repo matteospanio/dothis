@@ -6,8 +6,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { SnackbarContext } from "../lib/snackbarContext";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../lib/firebase";
+import * as ROUTES from "../constants/routes";
 
-export default function SignIn() {
+export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,10 +30,9 @@ export default function SignIn() {
   };
 
   const handleClick = async () => {
-    console.log("login");
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate("/login");
+      navigate(ROUTES.LOGIN);
     } catch (e: any) {
       handleActivate("error", e.message);
     }
@@ -99,7 +99,7 @@ export default function SignIn() {
                   variant="contained"
                   onClick={handleClick}
                 >
-                  Sign In
+                  Sign Up
                 </Button>
                 <Divider />
                 <Typography
@@ -108,7 +108,7 @@ export default function SignIn() {
                     marginBottom: "1rem",
                   }}
                 >
-                  Already have an account? <Link to="/login">Log In</Link>
+                  Already have an account? <Link to={ROUTES.LOGIN}>Log In</Link>
                 </Typography>
               </Box>
             </form>

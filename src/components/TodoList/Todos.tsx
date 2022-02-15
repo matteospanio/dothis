@@ -1,6 +1,6 @@
 import { Box, Divider, Fab, LinearProgress, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { todos } from "../../costants/faker";
+import { todos } from "../../constants/faker";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -17,7 +17,7 @@ export default function Todos() {
         return (
           <Link
             key={todo.id}
-            to={`/todo/${todo.id}`}
+            to={todo.id.toString()}
             style={{ textDecoration: "none", color: "black" }}
           >
             <div className="row g-0 mt-3 mb-4" style={{ alignItems: "center" }}>

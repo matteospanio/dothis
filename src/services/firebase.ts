@@ -32,3 +32,5 @@ export async function addUser(user: IUser) {
   const newUser = doc(usersCollection);
   return await setDoc(newUser, user);
 }
+
+export function getCurrenUserProfile() {}
