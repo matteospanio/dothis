@@ -2,12 +2,16 @@ import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Box, Divider, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "@mui/icons-material/Google";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../lib/firebase";
 
 export default function LogIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const handleEmailChange = ({ target }: { target: any }) => {
     setEmail(target.value);
@@ -19,6 +23,16 @@ export default function LogIn() {
 
   const handleClick = () => {
     console.log("login");
+  };
+
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      navigate("/");
+    } catch (error: any) {
+      alert(error.message);
+    }
   };
 
   return (
@@ -49,6 +63,7 @@ export default function LogIn() {
                 }}
               >
                 <img width={200} src="/images/JUST_DO_IT.png" alt="Todo Logo" />
+
                 <TextField
                   id="standard-basic"
                   label="Email"
@@ -66,6 +81,7 @@ export default function LogIn() {
                   value={password}
                   onChange={handlePasswordChange}
                 />
+                <br />
                 <Button
                   sx={{ margin: "1rem" }}
                   variant="contained"
@@ -79,6 +95,7 @@ export default function LogIn() {
                   variant="contained"
                   startIcon={<GoogleIcon />}
                   color="secondary"
+                  onClick={handleGoogleLogin}
                 >
                   Log In with Google
                 </Button>

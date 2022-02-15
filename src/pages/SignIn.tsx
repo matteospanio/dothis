@@ -2,12 +2,14 @@ import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Box, Divider, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SignIn() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const handleNameChange = ({ target }: { target: any }) => {
     setName(target.value);
@@ -21,8 +23,11 @@ export default function SignIn() {
     setPassword(target.value);
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     console.log("login");
+    try {
+      navigate("/");
+    } catch (error) {}
   };
 
   return (
@@ -49,10 +54,10 @@ export default function SignIn() {
                   textAlign: "center",
                   padding: "1rem",
                   bgcolor: "background.paper",
-                  //border: "1px solid #0712ff",
                 }}
               >
                 <img width={200} src="/images/JUST_DO_IT.png" alt="Todo Logo" />
+                <br />
                 <TextField
                   id="standard-basic"
                   label="Name"
@@ -79,6 +84,7 @@ export default function SignIn() {
                   value={password}
                   onChange={handlePasswordChange}
                 />
+                <br />
                 <Button
                   sx={{ margin: "1rem" }}
                   variant="contained"

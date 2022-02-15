@@ -5,7 +5,7 @@ import {
   ListItemText,
   ListItemButton,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function DrawerListItem({
   link,
@@ -16,14 +16,18 @@ export default function DrawerListItem({
   text: string;
   icon: any;
 }) {
+  const navigate = useNavigate();
+
   return (
-    <Link to={link} style={{ textDecoration: "none", color: "black" }}>
-      <ListItem disablePadding>
-        <ListItemButton>
-          <ListItemIcon>{icon}</ListItemIcon>
-          <ListItemText primary={text} />
-        </ListItemButton>
-      </ListItem>
-    </Link>
+    <ListItem disablePadding>
+      <ListItemButton
+        onClick={() => {
+          navigate(link);
+        }}
+      >
+        <ListItemIcon>{icon}</ListItemIcon>
+        <ListItemText primary={text} />
+      </ListItemButton>
+    </ListItem>
   );
 }
