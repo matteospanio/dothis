@@ -8,6 +8,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { SnackbarContext } from "../lib/snackbarContext";
@@ -29,11 +31,15 @@ export default function LogIn() {
     setPassword(target.value);
   };
 
-  const handleLoginWithEmailAndPassword = async () => {
+  const handleLoginWithEmailAndPassword = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
     try {
+      await setPersistence(auth, browserLocalPersistence);
       await signInWithEmailAndPassword(auth, email, password);
       handleActivate("success", "Logged in");
-      navigate("/");
+      navigate(ROUTES.HOME);
     } catch (e: any) {
       handleActivate("error", e.message);
     }
@@ -42,9 +48,10 @@ export default function LogIn() {
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
+      await setPersistence(auth, browserLocalPersistence);
       await signInWithPopup(auth, provider);
       handleActivate("success", "You're logged in!");
-      navigate("/");
+      navigate(ROUTES.HOME);
     } catch (e: any) {
       handleActivate("error", e.message);
     }
@@ -64,7 +71,7 @@ export default function LogIn() {
       >
         <div className="row g-0" style={{ justifyContent: "center" }}>
           <div className="col-md-6">
-            <form>
+            <form onSubmit={handleLoginWithEmailAndPassword} method="POST">
               <Box
                 sx={{
                   height: "auto",
@@ -100,7 +107,7 @@ export default function LogIn() {
                 <Button
                   sx={{ margin: "1rem" }}
                   variant="contained"
-                  onClick={handleLoginWithEmailAndPassword}
+                  type="submit"
                 >
                   Login
                 </Button>
