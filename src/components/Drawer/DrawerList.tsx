@@ -4,15 +4,18 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import DrawerListItem from "./DrawerListItem";
 import DrawerListLogout from "./DrawerListLogout";
 import DrawerListGithub from "./DrawerListGithub";
+import HomeIcon from "@mui/icons-material/Home";
+import * as ROUTES from "../../constants/routes";
 
 export default function DrawerList() {
   return (
     <List>
-      <DrawerListItem link="/todo" text="Todos" icon={<AllIcon />} />
+      <DrawerListItem link={ROUTES.HOME} text="Home" icon={<HomeIcon />} />
+      <DrawerListItem link={ROUTES.TODOS} text="Todos" icon={<AllIcon />} />
       <Divider />
       <DrawerListGithub />
       <DrawerListItem
-        link="/settings"
+        link={ROUTES.SETTINGS}
         text="Settings"
         icon={<SettingsIcon />}
       />

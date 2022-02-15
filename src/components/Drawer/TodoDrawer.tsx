@@ -1,15 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Drawer, Divider } from "@mui/material";
 import DrawerHeader from "./DrawerHeader";
 import DrawerList from "./DrawerList";
+import { DrawerContext } from "../../lib/drawerContext";
 
-export default function TodoDrawer({
-  drawerHandler,
-  displayDrawer,
-}: {
-  drawerHandler: Function;
-  displayDrawer: boolean;
-}) {
+export default function TodoDrawer() {
+  const { displayDrawer, handleDrawer } = useContext(DrawerContext);
+
   const toggleDrawer =
     () => (event: React.KeyboardEvent | React.MouseEvent) => {
       if (
@@ -20,7 +17,7 @@ export default function TodoDrawer({
         return;
       }
 
-      drawerHandler();
+      handleDrawer();
     };
 
   return (

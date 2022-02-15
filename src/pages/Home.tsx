@@ -6,32 +6,41 @@ import { auth } from "../lib/firebase";
 import * as ROUTES from "../constants/routes";
 import { SnackbarContext } from "../lib/snackbarContext";
 import { CircularProgress } from "@mui/material";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { DrawerContext } from "../lib/drawerContext";
 
 export default function Home() {
-  const { currentUser } = auth;
   const navigate = useNavigate();
   const { handleActivate } = useContext(SnackbarContext);
 
   const [displayDrawer, setDisplayDrawer] = useState(false);
+  const [user, setUser] = useState<User | null>();
 
   const handleDrawer = () => {
     setDisplayDrawer(!displayDrawer);
   };
 
-  if (currentUser) {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setUser(user);
+    } else {
+      setUser(null);
+      handleActivate("error", "You must be logged in to see this page", 2500);
+      setTimeout(() => navigate(ROUTES.LOGIN), 2000);
+    }
+  });
+
+  if (user) {
     return (
       <div>
-        <Navbar drawerHandler={handleDrawer} />
-        <TodoDrawer
-          displayDrawer={displayDrawer}
-          drawerHandler={handleDrawer}
-        />
-        <Outlet />
+        <DrawerContext.Provider value={{ displayDrawer, handleDrawer }}>
+          <Navbar />
+          <TodoDrawer />
+          <Outlet />
+        </DrawerContext.Provider>
       </div>
     );
   } else {
-    handleActivate("error", "You must be logged in to see this page", 2500);
-    setTimeout(() => navigate(ROUTES.LOGIN), 2000);
     return (
       <div
         style={{

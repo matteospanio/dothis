@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import { DrawerContext } from "../../lib/drawerContext";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -50,12 +51,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Navbar({ drawerHandler }: { drawerHandler: Function }) {
+export default function Navbar() {
+  const { handleDrawer } = useContext(DrawerContext);
+
   return (
     <AppBar position="static">
       <Toolbar>
         <IconButton
-          onClick={() => drawerHandler()}
+          onClick={() => handleDrawer()}
           size="large"
           edge="start"
           color="inherit"
