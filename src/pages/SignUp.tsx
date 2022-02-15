@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import { Box, Divider, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { SnackbarContext } from "../lib/snackbarContext";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import * as ROUTES from "../constants/routes";
 
@@ -31,8 +31,18 @@ export default function SignUp() {
 
   const handleClick = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      navigate(ROUTES.LOGIN);
+      const createdUserResult = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(createdUserResult.user, {
+        displayName: name,
+        photoURL:
+          "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png",
+      });
+      handleActivate("success", "Your account has been created.");
+      navigate(ROUTES.HOME);
     } catch (e: any) {
       handleActivate("error", e.message);
     }
