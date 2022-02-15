@@ -7,7 +7,7 @@ export default function Todo() {
   const tasksTodo = tasks.filter((task) => task.todoId === parseInt(uid));
 
   return (
-    <div>
+    <div className="" style={{ marginTop: "1rem" }}>
       <ul>
         {tasksTodo.map((task) => {
           return <li key={task.id}>{task.description}</li>;
