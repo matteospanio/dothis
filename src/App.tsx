@@ -11,6 +11,7 @@ import { SnackbarContext } from "./lib/snackbarContext";
 import { useSnackbar } from "./lib/useSnackbar";
 import GlobalSnackbar from "./components/Snackbar/GlobalSnackbar";
 import * as ROUTES from "./constants/routes";
+import Settings from "./pages/Settings";
 
 function App() {
   const snackbar = useSnackbar();
@@ -23,9 +24,10 @@ function App() {
           <Route path={ROUTES.LOGIN} element={<LogIn />} />
           <Route path={ROUTES.SIGNUP} element={<SignUp />} />
           <Route path={ROUTES.HOME} element={<Home />}>
-            <Route path={ROUTES.SETTINGS} element={<div>setting</div>} />
-            <Route path={ROUTES.TODOS} element={<Todos />} />
-            <Route path={ROUTES.TODO} element={<Todo />} />
+            <Route path={ROUTES.SETTINGS} element={<Settings />} />
+            <Route path={ROUTES.TODOS} element={<Todos />}>
+              <Route path=":id" element={<Todo />} />
+            </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
