@@ -14,16 +14,16 @@ import AddIcon from "@mui/icons-material/Add";
 const fabStyle = {
   position: "fixed",
   bottom: "1rem",
-  left: "29%",
+  left: "25%",
 };
 
 export default function Todos() {
   const navigate = useNavigate();
   return (
-    <div className="container" style={{ margin: 0, height: "100%" }}>
+    <div className="container-fluid" style={{ paddingRight: "2rem" }}>
       <div className="row">
         <div
-          className="col"
+          className="col-4"
           style={{
             padding: 0,
             margin: 0,
@@ -55,7 +55,7 @@ export default function Todos() {
             })}
           </List>
         </div>
-        <div className="col">
+        <div className="col-8">
           <Outlet />
         </div>
       </div>
