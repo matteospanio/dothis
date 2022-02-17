@@ -1,19 +1,33 @@
 export interface ITodo {
+  id: string;
   description: string;
   done: boolean;
-  id: number;
   priority: number;
+  createdAt: Date;
+  lastUpdate: Date;
+  tag: ITag[];
+  userId: string;
 }
 
-export interface IUser {
+export interface ITag {
   name: string;
-  email: string;
-  avatar: string;
+  color:
+    | "default"
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "success"
+    | "warning"
+    | undefined;
 }
 
 export interface ITask {
-  todoId: number;
+  todoId: string;
   description: string;
   done: boolean;
-  id: number;
+  id: string;
+  priority: number;
+  createdAt: Date;
+  lastUpdate: Date;
 }
