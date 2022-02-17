@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   Divider,
   Fab,
   ListItem,
@@ -8,8 +9,16 @@ import {
   Chip,
 } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
-import { todos } from "../../constants/faker";
 import AddIcon from "@mui/icons-material/Add";
+import { useEffect, useState } from "react";
+import { onSnapshot } from "firebase/firestore";
+import { ITag, ITodo } from "../../lib/interfaces";
+import { TodoContext } from "../../lib/todoContext";
+import {
+  addTodo,
+  getCurrentUser,
+  getTodoByUserId,
+} from "../../services/firebase";
 
 const fabStyle = {
   position: "fixed",
@@ -18,7 +27,58 @@ const fabStyle = {
 };
 
 export default function Todos() {
+  const currentUser = getCurrentUser();
   const navigate = useNavigate();
+
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState(1);
+  const [tags, setTags] = useState<ITag[]>([]);
+
+  const [todos, setTodos] = useState<ITodo[]>([]);
+  const [fetchedData, setFetchedData] = useState(false);
+
+  const [todoContext, setTodoContext] = useState<ITodo>({
+    description: "",
+    id: "",
+    createdAt: new Date(),
+    lastUpdate: new Date(),
+    priority: 1,
+    done: false,
+    tag: [],
+    userId: currentUser.uid,
+  });
+
+  useEffect(() => {
+    const q = getTodoByUserId(currentUser.uid);
+    onSnapshot(q, (querySnapshot) => {
+      setTodos(
+        querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          description: doc.data().description,
+          done: doc.data().done,
+          priority: doc.data().priority,
+          createdAt: doc.data().createdAt,
+          lastUpdate: doc.data().lastUpdate,
+          tag: doc.data().tag,
+          userId: doc.data().userId,
+        }))
+      );
+    });
+    setFetchedData(true);
+  }, []);
+
+  const fabClickHandler = async () => {
+    await addTodo({
+      description,
+      done: false,
+      priority,
+      createdAt: new Date(),
+      lastUpdate: new Date(),
+      tag: tags,
+      userId: currentUser.uid,
+    });
+  };
+
   return (
     <div className="container-fluid" style={{ paddingRight: "2rem" }}>
       <div className="row">
@@ -31,71 +91,56 @@ export default function Todos() {
             borderRight: "rgb(200,200,200) solid 1px",
           }}
         >
-          <List>
-            {todos.map((todo) => {
-              return (
-                <div key={todo.id}>
-                  <ListItem>
-                    <ListItemButton
-                      onClick={() => navigate(`/todo/${todo.id}`)}
-                    >
-                      <ListItemText>
-                        <h5>{todo.description}</h5>
-                        <Chip
-                          color="secondary"
-                          size={"small"}
-                          label="Chip Filled"
-                        />
-                      </ListItemText>
-                    </ListItemButton>
-                  </ListItem>
-                  <Divider />
-                </div>
-              );
-            })}
-          </List>
+          {fetchedData ? (
+            <List>
+              {todos.map((todo) => {
+                return (
+                  <div key={todo.id}>
+                    <ListItem>
+                      <ListItemButton
+                        onClick={() => {
+                          setTodoContext(todo);
+                          navigate(`/todo/${todo.id}`);
+                        }}
+                      >
+                        <ListItemText>
+                          <h5>{todo.description}</h5>
+                          {todo.tag.map((tag, index) => {
+                            return (
+                              <Chip
+                                key={index}
+                                color={tag.color}
+                                size={"small"}
+                                label={tag.name}
+                              />
+                            );
+                          })}
+                        </ListItemText>
+                      </ListItemButton>
+                    </ListItem>
+                    <Divider />
+                  </div>
+                );
+              })}
+            </List>
+          ) : (
+            <CircularProgress />
+          )}
         </div>
         <div className="col-8">
-          <Outlet />
+          <TodoContext.Provider value={todoContext}>
+            <Outlet />
+          </TodoContext.Provider>
         </div>
       </div>
-      <Fab onClick={() => {}} sx={fabStyle} aria-label="add" color="primary">
+      <Fab
+        onClick={fabClickHandler}
+        sx={fabStyle}
+        aria-label="add"
+        color="primary"
+      >
         <AddIcon />
       </Fab>
     </div>
   );
 }
-
-/*todos.map((todo) => {
-        return (
-          <Link
-            key={todo.id}
-            to={todo.id.toString()}
-            style={{ textDecoration: "none", color: "black" }}
-          >
-            <div className="row g-0 mt-3 mb-4" style={{ alignItems: "center" }}>
-              <div className="col-10 text-center">
-                <h3>{todo.description}</h3>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Box sx={{ width: "90%", ml: "1rem", mr: "1rem" }}>
-                    <LinearProgress
-                      variant="determinate"
-                      value={35}
-                      color="success"
-                    />
-                  </Box>
-                  <Box sx={{ minWidth: 35 }}>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                    >{`${Math.round(35)}%`}</Typography>
-                  </Box>
-                </Box>
-              </div>
-              <div className="col-2 text-center">
-                <ChevronRightIcon />
-              </div>
-            </div>
-            <Divider />
-          </Link>
- className="container"      })*/
