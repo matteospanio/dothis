@@ -3,6 +3,7 @@ import {
   collection,
   doc,
   getDocs,
+  orderBy,
   query,
   setDoc,
   where,
@@ -10,23 +11,8 @@ import {
 import { auth, db } from "../lib/firebase";
 import { ITag } from "../lib/interfaces";
 
-const usersCollection = collection(db, "users");
 const todosCollection = collection(db, "todos");
-
-export async function doesUsernameExists(username: string) {
-  const q = query(usersCollection, where("username", "==", username));
-
-  const querySnapshot = await getDocs(q);
-
-  let result: string[] = [];
-  querySnapshot.forEach((doc) => {
-    console.log(doc);
-    result.push(doc.id);
-  });
-
-  if (result.length > 0) return true;
-  return false;
-}
+const tasksCollection = collection(db, "tasks");
 
 export async function addTodo({
   description,
@@ -60,6 +46,22 @@ export async function addTodo({
     console.log(error.message);
     throw new Error(error.message);
   }
+}
+
+export function getTasksByTodoId(id: string) {
+  return query(
+    tasksCollection,
+    where("todoId", "==", id),
+    orderBy("createdAt", "desc")
+  );
+}
+
+export function getTodoByUserId(id: string) {
+  return query(
+    todosCollection,
+    where("userId", "==", id),
+    orderBy("createdAt", "desc")
+  );
 }
 
 export function getCurrentUser() {
