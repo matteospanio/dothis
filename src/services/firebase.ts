@@ -1,3 +1,4 @@
+import { User } from "firebase/auth";
 import {
   collection,
   doc,
@@ -6,10 +7,11 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
-import { db } from "../lib/firebase";
-import { IUser } from "../lib/interfaces";
+import { auth, db } from "../lib/firebase";
+import { ITag } from "../lib/interfaces";
 
 const usersCollection = collection(db, "users");
+const todosCollection = collection(db, "todos");
 
 export async function doesUsernameExists(username: string) {
   const q = query(usersCollection, where("username", "==", username));
@@ -22,15 +24,44 @@ export async function doesUsernameExists(username: string) {
     result.push(doc.id);
   });
 
-  console.table(result);
-
   if (result.length > 0) return true;
   return false;
 }
 
-export async function addUser(user: IUser) {
-  const newUser = doc(usersCollection);
-  return await setDoc(newUser, user);
+export async function addTodo({
+  description,
+  done,
+  priority,
+  createdAt,
+  lastUpdate,
+  tag,
+  userId,
+}: {
+  description: string;
+  done: boolean;
+  priority: number;
+  createdAt: Date;
+  lastUpdate: Date;
+  tag: ITag[];
+  userId: string;
+}) {
+  const newTodo = doc(todosCollection);
+  try {
+    return await setDoc(newTodo, {
+      description,
+      done,
+      priority,
+      createdAt,
+      lastUpdate,
+      tag,
+      userId,
+    });
+  } catch (error: any) {
+    console.log(error.message);
+    throw new Error(error.message);
+  }
 }
 
-export function getCurrenUserProfile() {}
+export function getCurrentUser() {
+  return auth.currentUser as User;
+}
