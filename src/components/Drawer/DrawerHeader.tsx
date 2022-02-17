@@ -1,19 +1,22 @@
 import Avatar from "@mui/material/Avatar";
-import { user } from "../../constants/faker";
-import { auth } from "../../lib/firebase";
+import { getCurrentUser } from "../../services/firebase";
 
 export default function DrawerHeader() {
-  const { currentUser } = auth;
+  const currentUser = getCurrentUser();
   return (
     <div className="bg">
       <div className="header">
         <Avatar
           alt="Nome"
-          src={currentUser?.photoURL ? currentUser.photoURL : user.avatar}
+          src={
+            currentUser?.photoURL
+              ? currentUser.photoURL
+              : "./images/avatar_linux.jpg"
+          }
           sx={{ width: 56, height: 56, marginBottom: "1rem" }}
         />
         <h1>{currentUser?.displayName}</h1>
-        <p>{currentUser ? currentUser.email : "no email"}</p>
+        <p>{currentUser?.email}</p>
       </div>
     </div>
   );
