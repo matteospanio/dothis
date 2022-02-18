@@ -11,15 +11,7 @@ export interface ITodo {
 
 export interface ITag {
   name: string;
-  color:
-    | "default"
-    | "primary"
-    | "secondary"
-    | "error"
-    | "info"
-    | "success"
-    | "warning"
-    | undefined;
+  color: TagColor;
 }
 
 export interface ITask {
@@ -30,4 +22,14 @@ export interface ITask {
   priority: number;
   createdAt: Date;
   lastUpdate: Date;
+}
+
+export enum TagColor {
+  default = "default",
+  primary = "primary",
+  secondary = "secondary",
+  error = "error",
+  info = "info",
+  success = "success",
+  warning = "warning",
 }
