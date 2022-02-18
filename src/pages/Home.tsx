@@ -1,17 +1,15 @@
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import TodoDrawer from "../components/Drawer/TodoDrawer";
 import { auth } from "../lib/firebase";
 import * as ROUTES from "../constants/routes";
-import { SnackbarContext } from "../lib/snackbarContext";
 import { CircularProgress } from "@mui/material";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { DrawerContext } from "../lib/drawerContext";
 
 export default function Home() {
   const navigate = useNavigate();
-  const { handleActivate } = useContext(SnackbarContext);
 
   const [displayDrawer, setDisplayDrawer] = useState(false);
   const [user, setUser] = useState<User | null>();
@@ -20,14 +18,21 @@ export default function Home() {
     setDisplayDrawer(!displayDrawer);
   };
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setUser(user);
-    } else {
-      setUser(null);
-      handleActivate("error", "You must be logged in to see this page", 2500);
-      setTimeout(() => navigate(ROUTES.LOGIN), 2000);
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted) {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUser(user);
+        } else {
+          setUser(null);
+        }
+      });
+      if (user === null) navigate(ROUTES.LOGIN);
     }
+    return () => {
+      isMounted = false;
+    };
   });
 
   if (user) {

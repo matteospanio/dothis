@@ -19,6 +19,7 @@ import {
   getCurrentUser,
   getTodoByUserId,
 } from "../../services/firebase";
+import AddTodoDialog from "../Dialogs/AddTodoDialog";
 
 const fabStyle = {
   position: "fixed",
@@ -30,9 +31,7 @@ export default function Todos() {
   const currentUser = getCurrentUser();
   const navigate = useNavigate();
 
-  const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState(1);
-  const [tags, setTags] = useState<ITag[]>([]);
+  const [addTodoIsOpen, setAddTodoIsOpen] = useState(false);
 
   const [todos, setTodos] = useState<ITodo[]>([]);
   const [fetchedData, setFetchedData] = useState(false);
@@ -48,35 +47,49 @@ export default function Todos() {
     userId: currentUser.uid,
   });
 
-  useEffect(() => {
-    const q = getTodoByUserId(currentUser.uid);
-    onSnapshot(q, (querySnapshot) => {
-      setTodos(
-        querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          description: doc.data().description,
-          done: doc.data().done,
-          priority: doc.data().priority,
-          createdAt: doc.data().createdAt,
-          lastUpdate: doc.data().lastUpdate,
-          tag: doc.data().tag,
-          userId: doc.data().userId,
-        }))
-      );
-    });
-    setFetchedData(true);
-  }, []);
-
-  const fabClickHandler = async () => {
+  const handleAddTodoDialog = async (
+    description: string,
+    priority: number,
+    tag: ITag[] = []
+  ) => {
     await addTodo({
       description,
       done: false,
       priority,
       createdAt: new Date(),
       lastUpdate: new Date(),
-      tag: tags,
+      tag,
       userId: currentUser.uid,
     });
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    const q = getTodoByUserId(currentUser.uid);
+    onSnapshot(q, (querySnapshot) => {
+      if (isMounted)
+        setTodos(
+          querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            description: doc.data().description,
+            done: doc.data().done,
+            priority: doc.data().priority,
+            createdAt: doc.data().createdAt,
+            lastUpdate: doc.data().lastUpdate,
+            tag: doc.data().tag,
+            userId: doc.data().userId,
+          }))
+        );
+    });
+    setFetchedData(true);
+    return () => {
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fabClickHandler = (status: boolean) => {
+    setAddTodoIsOpen(!status);
   };
 
   return (
@@ -133,8 +146,13 @@ export default function Todos() {
           </TodoContext.Provider>
         </div>
       </div>
+      <AddTodoDialog
+        open={addTodoIsOpen}
+        onClose={fabClickHandler}
+        action={handleAddTodoDialog}
+      />
       <Fab
-        onClick={fabClickHandler}
+        onClick={() => fabClickHandler(addTodoIsOpen)}
         sx={fabStyle}
         aria-label="add"
         color="primary"

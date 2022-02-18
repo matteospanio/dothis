@@ -6,7 +6,7 @@ import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import Todos from "./components/TodoList/Todos";
-import Todo from "./components/TodoList/Todo";
+import Task from "./components/TodoList/Task";
 import { SnackbarContext } from "./lib/snackbarContext";
 import { useSnackbar } from "./lib/useSnackbar";
 import GlobalSnackbar from "./components/Snackbar/GlobalSnackbar";
@@ -26,7 +26,7 @@ function App() {
           <Route path={ROUTES.HOME} element={<Home />}>
             <Route path={ROUTES.SETTINGS} element={<Settings />} />
             <Route path={ROUTES.TODOS} element={<Todos />}>
-              <Route path=":id" element={<Todo />} />
+              <Route path=":id" element={<Task />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
