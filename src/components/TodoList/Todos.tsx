@@ -20,12 +20,7 @@ import {
   getTodoByUserId,
 } from "../../services/firebase";
 import AddTodoDialog from "../Dialogs/AddTodoDialog";
-
-const fabStyle = {
-  position: "fixed",
-  bottom: "1rem",
-  left: "25%",
-};
+import styles from "../../styles/Todos.module.css";
 
 export default function Todos() {
   const currentUser = getCurrentUser();
@@ -93,17 +88,9 @@ export default function Todos() {
   };
 
   return (
-    <div className="container-fluid" style={{ paddingRight: "2rem" }}>
+    <div className={"container-fluid " + styles.container}>
       <div className="row">
-        <div
-          className="col-4"
-          style={{
-            padding: 0,
-            margin: 0,
-            height: "90vh",
-            borderRight: "rgb(200,200,200) solid 1px",
-          }}
-        >
+        <div className={"col-4 " + styles.todoList}>
           {fetchedData ? (
             <List>
               {todos.map((todo) => {
@@ -125,6 +112,7 @@ export default function Todos() {
                                 color={tag.color}
                                 size={"small"}
                                 label={tag.name}
+                                className="me-1"
                               />
                             );
                           })}
@@ -153,7 +141,7 @@ export default function Todos() {
       />
       <Fab
         onClick={() => fabClickHandler(addTodoIsOpen)}
-        sx={fabStyle}
+        className={styles.fab}
         aria-label="add"
         color="primary"
       >

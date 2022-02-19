@@ -2,7 +2,6 @@ import { User } from "firebase/auth";
 import {
   collection,
   doc,
-  getDocs,
   orderBy,
   query,
   setDoc,

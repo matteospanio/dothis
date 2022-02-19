@@ -12,7 +12,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { ITag, TagColor } from "../../lib/interfaces";
 import TagChips from "./TagChips";
 

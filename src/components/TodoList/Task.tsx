@@ -13,6 +13,7 @@ import { ITask } from "../../lib/interfaces";
 import { getTasksByTodoId } from "../../services/firebase";
 import { TodoContext } from "../../lib/todoContext";
 import PlusIcon from "@mui/icons-material/AddCircleOutlined";
+import styles from "../../styles/Task.module.css";
 
 export default function Task() {
   const { id } = useParams();
@@ -54,6 +55,7 @@ export default function Task() {
               color={tag.color}
               size={"small"}
               label={tag.name}
+              className="me-1"
             />
           );
         })}
@@ -61,7 +63,7 @@ export default function Task() {
           <PlusIcon />
         </IconButton>
       </div>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box className={styles.box}>
         {tasks.map((task) => {
           return (
             <FormControlLabel

@@ -14,6 +14,7 @@ import {
 import { auth } from "../lib/firebase";
 import { SnackbarContext } from "../lib/snackbarContext";
 import * as ROUTES from "../constants/routes";
+import styles from "../styles/Auth.module.css";
 
 export default function LogIn() {
   const [email, setEmail] = useState("");

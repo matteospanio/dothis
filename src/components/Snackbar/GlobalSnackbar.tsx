@@ -1,6 +1,7 @@
 import { Alert, AlertColor, Snackbar } from "@mui/material";
 import { useContext } from "react";
 import { SnackbarContext } from "../../lib/snackbarContext";
+import styles from "../../styles/Snackbar.module.css";
 
 export default function GlobalSnackbar() {
   const { message, isOpen, timeout, color, handleClose } =
@@ -16,7 +17,7 @@ export default function GlobalSnackbar() {
       <Alert
         onClose={handleClose}
         severity={actualColor}
-        sx={{ width: "100%" }}
+        className={styles.snackbar}
         variant="filled"
       >
         {message}
