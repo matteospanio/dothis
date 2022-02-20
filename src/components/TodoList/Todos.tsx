@@ -7,6 +7,8 @@ import {
   ListItemText,
   ListItemButton,
   Chip,
+  Container,
+  Grid,
 } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
@@ -88,9 +90,9 @@ export default function Todos() {
   };
 
   return (
-    <div className={"container-fluid " + styles.container}>
-      <div className="row">
-        <div className={"col-4 " + styles.todoList}>
+    <div>
+      <Grid container spacing={0}>
+        <Grid item xs={4} className={styles.todoList}>
           {fetchedData ? (
             <List>
               {todos.map((todo) => {
@@ -123,30 +125,30 @@ export default function Todos() {
                   </div>
                 );
               })}
+              <Fab
+                onClick={() => fabClickHandler(addTodoIsOpen)}
+                className={styles.fab}
+                aria-label="add"
+                color="primary"
+              >
+                <AddIcon />
+              </Fab>
             </List>
           ) : (
             <CircularProgress />
           )}
-        </div>
-        <div className="col-8">
+        </Grid>
+        <Grid item xs={8}>
           <TodoContext.Provider value={todoContext}>
             <Outlet />
           </TodoContext.Provider>
-        </div>
-      </div>
+        </Grid>
+      </Grid>
       <AddTodoDialog
         open={addTodoIsOpen}
         onClose={fabClickHandler}
         action={handleAddTodoDialog}
       />
-      <Fab
-        onClick={() => fabClickHandler(addTodoIsOpen)}
-        className={styles.fab}
-        aria-label="add"
-        color="primary"
-      >
-        <AddIcon />
-      </Fab>
     </div>
   );
 }

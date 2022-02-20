@@ -55,7 +55,7 @@ export default function Navbar() {
   const { handleDrawer } = useContext(DrawerContext);
 
   return (
-    <AppBar position="static">
+    <AppBar position="sticky">
       <Toolbar>
         <IconButton
           onClick={() => handleDrawer()}
