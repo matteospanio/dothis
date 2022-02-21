@@ -5,3 +5,12 @@
   width: 100vw;
   height: 100vh;
 }
+
+.formBox {
+  height: auto;
+  width: auto;
+  border-radius: 1rem;
+  text-align: center;
+  padding: 1rem;
+  background-color: white;
+}

@@ -60,28 +60,14 @@ export default function LogIn() {
 
   return (
     <div style={{ backgroundColor: "orange" }}>
-      <div
-        className="container"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          width: "100vw",
-        }}
-      >
+      <div className={"container " + styles.authscreen}>
         <div className="row g-0" style={{ justifyContent: "center" }}>
           <div className="col-md-6">
             <form onSubmit={handleLoginWithEmailAndPassword} method="POST">
               <Box
+                className={styles.formBox}
                 sx={{
-                  height: "auto",
-                  width: "auto",
-                  borderRadius: "1rem",
                   boxShadow: 24,
-                  textAlign: "center",
-                  padding: "1rem",
-                  bgcolor: "background.paper",
                 }}
               >
                 <img width={200} src="/images/JUST_DO_IT.png" alt="Todo Logo" />
@@ -123,12 +109,7 @@ export default function LogIn() {
                   Login with Google
                 </Button>
                 <Divider />
-                <Typography
-                  sx={{
-                    marginTop: "1rem",
-                    marginBottom: "1rem",
-                  }}
-                >
+                <Typography className="mt-3 mb-3">
                   Missing account? <Link to={ROUTES.SIGNUP}>Sign Up</Link>
                 </Typography>
               </Box>

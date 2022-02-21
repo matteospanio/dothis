@@ -7,6 +7,7 @@ import { SnackbarContext } from "../lib/snackbarContext";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import * as ROUTES from "../constants/routes";
+import styles from "../styles/Auth.module.css";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -50,16 +51,7 @@ export default function SignUp() {
 
   return (
     <div style={{ backgroundColor: "orange" }}>
-      <div
-        className="container"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          width: "100vw",
-        }}
-      >
+      <div className={"container " + styles.authscreen}>
         <div className="row g-0" style={{ justifyContent: "center" }}>
           <div className="col-md-6">
             <form>
@@ -112,12 +104,7 @@ export default function SignUp() {
                   Sign Up
                 </Button>
                 <Divider />
-                <Typography
-                  sx={{
-                    marginTop: "1rem",
-                    marginBottom: "1rem",
-                  }}
-                >
+                <Typography className="mt-3 mb-3">
                   Already have an account? <Link to={ROUTES.LOGIN}>Log In</Link>
                 </Typography>
               </Box>
