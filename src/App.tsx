@@ -26,7 +26,7 @@ function App() {
           <Route path={ROUTES.HOME} element={<Home />}>
             <Route path={ROUTES.SETTINGS} element={<Settings />} />
             <Route path={ROUTES.TODOS} element={<Todos />}>
-              <Route path=":id" element={<Task />} />
+              <Route path={ROUTES.TODO} element={<Task />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
