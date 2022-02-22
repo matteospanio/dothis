@@ -5,6 +5,7 @@ import {
   orderBy,
   query,
   setDoc,
+  Timestamp,
   where,
 } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
@@ -25,8 +26,8 @@ export async function addTodo({
   description: string;
   done: boolean;
   priority: number;
-  createdAt: Date;
-  lastUpdate: Date;
+  createdAt: Timestamp;
+  lastUpdate: Timestamp;
   tag: ITag[];
   userId: string;
 }) {

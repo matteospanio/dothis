@@ -1,10 +1,12 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface ITodo {
   id: string;
   description: string;
   done: boolean;
   priority: number;
-  createdAt: Date;
-  lastUpdate: Date;
+  createdAt: Timestamp;
+  lastUpdate: Timestamp;
   tag: ITag[];
   userId: string;
 }
@@ -20,8 +22,8 @@ export interface ITask {
   done: boolean;
   id: string;
   priority: number;
-  createdAt: Date;
-  lastUpdate: Date;
+  createdAt: Timestamp;
+  lastUpdate: Timestamp;
 }
 
 export enum TagColor {
