@@ -8,11 +8,12 @@ import {
   ListItemButton,
   Chip,
   Grid,
+  Typography,
 } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
-import { onSnapshot } from "firebase/firestore";
+import { onSnapshot, Timestamp } from "firebase/firestore";
 import { ITag, ITodo } from "../../lib/interfaces";
 import { TodoContext } from "../../lib/todoContext";
 import {
@@ -35,8 +36,8 @@ export default function Todos() {
   const [todoContext, setTodoContext] = useState<ITodo>({
     description: "",
     id: "",
-    createdAt: new Date(),
-    lastUpdate: new Date(),
+    createdAt: Timestamp.fromDate(new Date()),
+    lastUpdate: Timestamp.fromDate(new Date()),
     priority: 1,
     done: false,
     tag: [],
@@ -52,8 +53,8 @@ export default function Todos() {
       description,
       done: false,
       priority,
-      createdAt: new Date(),
-      lastUpdate: new Date(),
+      createdAt: Timestamp.fromDate(new Date()),
+      lastUpdate: Timestamp.fromDate(new Date()),
       tag,
       userId: currentUser.uid,
     });
@@ -105,7 +106,9 @@ export default function Todos() {
                         }}
                       >
                         <ListItemText>
-                          <h5>{todo.description}</h5>
+                          <Typography variant="h5">
+                            {todo.description}
+                          </Typography>
                           {todo.tag.map((tag, index) => {
                             return (
                               <Chip
@@ -117,6 +120,10 @@ export default function Todos() {
                               />
                             );
                           })}
+                          <Typography mt={1} variant="body2">
+                            {"Created: " +
+                              todo.createdAt.toDate().toLocaleDateString()}
+                          </Typography>
                         </ListItemText>
                       </ListItemButton>
                     </ListItem>
